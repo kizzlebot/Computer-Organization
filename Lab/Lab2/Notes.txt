@@ -8,4 +8,33 @@
 + Last week 
 	- CPU Performance Equation.
 			T = IC * CPI * CI
+------------------------------------------------------------------------------------
+					Machine 1   Machine 2 | Normalize wrt Machine a | Normalize wrt Machine b
+Prog #1    1 s					10s     |   1   10								|		.1		1
+Prog #2    1000         100     |   1   100/1000 = .1			|   10		1
+------------------------------------------------------------------------------------
+(1000+1)/(10+100) = 9.1 x faster
+
+
+Time Formulas
+	Arithmetic mean = sum(time)/(numProgs)
+  Weighted Arithmetic Mean = sum(weight*time)/n
+		- Whenever time information given, weighted Arithmetic mean 
+  Harmonic Mean (H.M) = n/(sum(1/rate_i))
+	  - Cycles per instructions
+		- Use if data involves rates.
+	Geometric Mean (G.M.) = (Product(ratio(i),1,n))^.5
+		- Use for data involving ratios. 
+------------------------------------------------------------------------------------
+ 30mpH for 10 miles
+ 90mph for 10 miles
+- What is Avg speed?
++ Answer
+ Computer t1, and t2
+------------------------------------------------------------------------------------
+
+Amdahl's Law
+   Exec Time after improvement = (exec Time affected by improvment)/(Amount of improvement) + (time unaffected)
+
+
 
