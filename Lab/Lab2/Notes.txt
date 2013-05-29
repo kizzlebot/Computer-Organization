@@ -1,0 +1,11 @@
++ Today's Topic:
+	- Averaging
+	- Amdahl's Law
++	Next week 
+	- Chapter #2: Assembly
+	- Project #1: Assigned (Due June 19th, via webcourses)
+		* Bubble sort algorithm implemented via Assembly
++ Last week 
+	- CPU Performance Equation.
+			T = IC * CPI * CI
+
