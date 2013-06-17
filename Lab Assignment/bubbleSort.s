@@ -1,123 +1,230 @@
-# James Choi
-# EEL 3801 - Lab Project #1
-# June 16, 2013
-# BubbleSort.s
-#
-# This program takes a user input of 10 characters and sorts 
-# them using bubble sort algorithm.
-#    a.) Input assumed to be within ascii range 65 - 123
-#    b.) ASCII range 97-122 are converted to uppercase
+##################################################################
+#   Data
+##################################################################
 .data
-prompt: .asciiz  "\n\nEnter up to 10 characters: "
-answer: .asciiz  "Sorted: "
-newLine: .asciiz "\n"
-charList: .word 10 # 10 byte space 
-theString: .asciiz "           "
+prompt: .asciiz  "\n\nEnter up to 10 characters: "  # Prompt asking for user input
+newLine: .asciiz "\n"								# Newline character
+theString: .asciiz "           "					# A ten character string initially filled with whitespace
 
+##################################################################
+#   Text
+##################################################################
 .text 
+##################################################################
+#####   Procedure: Main
+#####   Info:      Asks user for input, gets input, and then call 
+#####			   procedures to manipulate the input and output.
+##################################################################
 main:
-	# print prompt
+	############################################################
+	#  Print Prompt
+	############################################################
 	la $a0, prompt   # Load address of prompt from memory into $a0
 	li $v0, 4        # Load Opcode: 4 (print string) 
 	syscall          # Init syscall
 	
-	# read theSTring
-	la $a0,theString  # load address of theString
-	li $a1,11  # length+1
-	li $v0,8   # opcode 8
+
+	#############################################
+	#  Read User Input into address of theString
+	#############################################
+	la $a0,theString  # Load address of theString into syscall argument a0
+	li $a1,11         # Load sizeOfInput+1 into syscall argument a1
+	li $v0,8          # Load Opcode: 8 (Read String)
 	syscall
 	
+	##############################
+	#  Define total num of chars
+	##############################
 	li $s7,10           # s7 upper index
 	
-	jal uppercase
+	##############################
+	#  Call procedures 
+	##############################
+	jal uppercase  
 	jal sort
 	jal print
 	j exit
 
+
+################################################################################################################
+#####   Procedure: uppercase
+#####   Info:      Loops through the ten elements of chars gathered from 
+#####			   user input and if ascii is in range between 97  
+#####			   and 122, it will subtract 32 and store back
+################################################################################################################
 uppercase:
-	la $t0, theString   # Load address to theString into $t0
-	add $t6,$zero,$zero # Set index i = 0 $t6
-	addi $t7,$zero,10   # Set upper bound to ten $t7
+
+	la $s0, theString    # Load base address to theString into $t0
+	add $t6,$zero,$zero  # Set index i = 0 ($t6)
+	
 	
 
 	lupper:
-		beq $t6,$t7,finishUppercase 
+		#####################################
+		#  Check for sentinal val and if true
+		#  branch to done to jump back to ra
+		#####################################
+		beq $t6,$s7,done 
 
-		add $s2,$t0,$t6 # t1 = addressofTheString+i
+		#####################################
+		#  Load Array[i]
+		#####################################
+		add $s2,$s0,$t6 #
 		lb  $t1,0($s2)
-		# if t1 > 96 && t1 < 123
+		
+		#####################################
+		#  if char is within lowercase 
+		#  range.
+		#####################################
 		sgt  $t2,$t1,96
 		slti $t3,$t1,123
 		and $t3,$t2,$t3
-		beq $t3,$zero,good
+		#####################################
+		#  else, don't store byte
+		#####################################
+		beq $t3,$zero,isUpper
 		addi $t1,$t1,-32
 		sb   $t1, 0($s2)
-		good:
 		
+		isUpper:
+		#####################################
+		#  increment and Jump back 
+		#####################################
 		addi $t6,$t6,1
-
 		j lupper
-finishUppercase:
-	jr $ra
 
+
+################################################################################################################
+# uppercase END
+################################################################################################################
+
+
+
+################################################################################################################
+#####   Procedure: sort
+#####   Info:      Bubble sorts whatever is contained within 
+#####			   theString based on ascii values
+################################################################################################################
 sort:	
-	add $t0,$zero,$zero # t0 = 0
-	la  $s0,theString
-	
+	####################################
+	#  Initialize incrementer for outer
+	#  loop
+	####################################
+	add $t0,$zero,$zero 
+
+	####################################
+	#  Outer Loop
+	#################################### 
 	loop:
+		#####################################
+		#  Check for sentinal val and if true
+		#  branch to done
+		#####################################
 		beq $t0,$s7,done
+
+		####################################
+		#  Initialize upper bound of inner
+		#  loop ( 10 - i - 1 ) 
+		####################################
 		sub $t7,$s7,$t0
 		addi $t7,$t7,-1
 		
+		####################################
+		#  Initialize incrementer for inner
+		#  loop
+		####################################
 		add $t1,$zero,$zero
+		
+		####################################
+		#  Inner Loop
+		#################################### 
 		jLoop:
+			#####################################
+			#  Check for sentinal val and if true
+			#  branch to continue
+			#####################################
 			beq $t1,$t7,continue
 			
-			# load s1 = array[j], s2 = array[j+1]
+			####################################
+			#  Load Array[i] and Array[i+1]
+			####################################
 			add $t6,$s0,$t1
 			lb  $s1,0($t6)
 			lb  $s2,1($t6)
 			
-		
-			good2:
-			# if a[j] > a[j+1] swap
+			#########################################
+			#  If ascii(Array[i]) > ascii(Array[i+1])
+			#  then swap and store
+			#########################################
 			sgt $t2, $s1,$s2
-			beq $t2, $zero, afterIf
+			#########################################
+			#  Else,  don't swap and store
+			#########################################
+			beq $t2, $zero, good
 			sb  $s2,0($t6)
 			sb  $s1,1($t6)
 			
-			afterIf:
+			good:
+			#########################################
+			#  increment and Jump back 
+			#########################################
 			addi $t1,$t1,1
 			j jLoop
+		
 		continue:
+		#####################################
+		#  increment and Jump back 
+		#####################################
 		addi $t0,$t0,1
 		j loop
-done:
-	jr $ra
-	
-	
 
-print:
-	la $t0, theString   # Load address to theString into $t0
-	add $t6,$zero,$zero # Set index i = 0 $t6
-	addi $t7,$zero,10   # Set upper bound to ten $t7
 	
-	# print a new line
+	
+##################################################################
+#####   Procedure: Print
+#####   Info:      Prints whatever is stored inside theString
+#####			   
+##################################################################
+print:
+
+	####################################
+	# Print a new line
+	####################################
 	la $a0,newLine
 	li $v0,4
 	syscall 
 	
+	####################################
+	#  Initialize incrementer for loop
+	####################################
+	add $t6,$zero,$zero # Set index i = 0 $t6
+	
 	lprint:
-		beq $t6,$t7,finishPrint  
+		#####################################
+		#  Check for sentinal val and if true
+		#  branch to done
+		#####################################
+		beq $t6,$s7,done  
 
-		add $t1,$t0,$t6 # t1 = addressofTheString+i
+		####################################
+		#  Load Array[i] into t1 and print
+		####################################
+		add $t1,$s0,$t6 
+		lb $a0, 0($t1)  # Load argument
+		li $v0, 11      # Load opcode
+		syscall			# Call syscall
 
-		lb $a0, 0($t1)  # 
-		li $v0, 11      # System Call Code 11 is for print
-		syscall
-
-		addi $t6,$t6,1
+		#########################################
+		#  increment and Jump back 
+		#########################################
+		addi $t6,$t6,1  
 		j lprint
-finishPrint:
+#########################################	
+#  Procedure: done
+#       Info: Jumps to $ra.
+#             Only one procedure which jumps 
+#			  to return address is necessary
+#########################################
+done:
 	jr $ra
 exit:
