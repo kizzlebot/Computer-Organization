@@ -1,0 +1,9 @@
+# Ignore files that end in .o or .a 
+*.[oa]
+
+# Ignore files that end in tilde ~
+~
+
+# Ignore directories named tmp
+tmp/
+
