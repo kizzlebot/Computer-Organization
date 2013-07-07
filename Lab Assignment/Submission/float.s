@@ -2,11 +2,13 @@
 #   Data
 ##################################################################
 .data
-prompt: .asciiz  "\n\nEnter a float: "  # Prompt asking for user input
+prompt: .asciiz  "Enter a float: "  # Prompt asking for user input
 newLine: .asciiz "\n"								# Newline character
-meanVal: .asciiz "\nMean: "								# Newline characte
-floatSet1: .float 0.0, 42.2, 78.8, 129.4, 133.0, 0.0, 42.2, 78.8, 129.4, 133.0, 0.0  # A eleven-space float array initially filled with whitespace
-floatSet2: .float 0.0, 42.2, 78.8, 129.4, 133.0, 0.0, 42.2, 78.8, 129.4, 133.0, 0.0
+meanLbl: .asciiz "\nMean: "								# Newline characte
+dotLbl: .asciiz "\nDot Product: "		
+sumLbl:  .asciiz "\nSum: "
+floatSet1: .float 0.11, 0.34, 1.23, 5.34, 0.76, 0.65, 0.34, 0.12, 0.87, 0.56
+floatSet2: .float 7.89, 6.87 ,9.89 ,7.12 ,6.23, 8.76, 8.21, 7.32, 7.32, 8.22  # A eleven-space float array initially filled with whitespace
 ##################################################################
 #   Text
 ##################################################################
@@ -27,8 +29,8 @@ main:
 	############################################################
 	#  Read floatSet1
 	############################################################
-	la $a1,floatSet1 # Load address of floatSet1into syscall argument a1
-	jal read         # Jump to read function   
+	#la $a1,floatSet1 # Load address of floatSet1into syscall argument a1
+	#jal read         # Jump to read function   
 	#jal printArray
 	############################################################
 	#  Read floatSet2
@@ -41,16 +43,23 @@ main:
 	#  Calculate Mean 
 	############################################################
 	la $a1,floatSet1
+	mtc1 $zero,$f12
 	jal mean
-	
+	############################################################
+	#  Calculate Mean 
+	############################################################
+	la $a1,floatSet2
+	mtc1 $zero,$f12
+	jal mean
 	
 
 	############################################################
 	#  Calculate Dot Product
 	############################################################
-	#la $a1,floatSet1
-	#jal dotProd
-	#jal printCalc
+	la $a1,floatSet1
+	la $a2,floatSet2
+	jal dotProd
+	
 
 
 	j exit	
@@ -64,40 +73,76 @@ main:
 ##### Returns :    
 ##### Description: calculates the mean and places in array[10]
 ####****************************************************************************************************####
-mean:
-	mtc1 $zero,$f1
-	meanSummate:
-		# t2 = baseAddr+offset
-		add $t2,$a1,$t1 
-		beq $t0,$t7,meanDivide
-		
-		
-		l.s $f0,0($t2)  
-		add.s $f1,$f1,$f0
+dotProd:
+	dotSub:
+		beq $t0,$t7,dotExit
+		add $t2,$a1,$t1 	
+		add $t3,$a2,$t1 
 
+		l.s $f2,0($t2)
+		l.s $f3,0($t3)
+		mul.s $f2,$f2,$f3
+		
+		add.s $f12,$f12,$f2
 
 		addi $t0,$t0,1
 		sll $t1,$t0,2
-		j meanSummate
-	meanDivide:
-		mtc1  $t7,$f5
-		div.s $f1,$f1,$f5
-		s.s $f1,0($t2)		
-		####################################
-		# Print prompt label
-		####################################	
-	 	la $a0, meanVal   # Load address of prompt from memory into $a0
-		li $v0, 4        # Load Opcode: 4 (print string) 
-		syscall          # Init syscall
-		####################################
-		# Print what is in f12
-		####################################	
-		l.s $f12,0($t2)
+		j dotSub 
+	dotExit:
+		# Print the sum label
+		la $a0,dotLbl 
+		li $v0,4
+		syscall 
+		cvt.w.s $f12 ,$f12
+
+		# print the digit
 		li $v0, 2
 		syscall
-
-
 		j done
+		
+####****************************************************************************************************####
+##### Function:    mean
+##### Argument:    $a1 (baseaddress), $t0 (lower bound), $t7 (upperbound)
+##### Returns :    
+##### Description: calculates the mean and places in array[10]
+####****************************************************************************************************####
+mean:
+	meanSubroutine:
+		beq $t0,$t7,meanDiv
+		add $t2,$a1,$t1 	
+
+		l.s $f2,0($t2)
+		add.s $f12,$f12,$f2
+
+		addi $t0,$t0,1
+		sll $t1,$t0,2
+		j meanSubroutine
+	meanDiv:
+		
+		# Print the sum label
+		la $a0,sumLbl 
+		li $v0,4
+		syscall 
+		# print the digit
+		li $v0,2
+		syscall
+
+		# CAlculate mean 
+		mtc1 $t7,$f0
+		cvt.s.w $f0,$f0
+		div.s $f12,$f12,$f0
+		#trunc.w.s $f12,$f12
+
+		# print mean label
+		la $a0,meanLbl
+		li $v0,4
+		syscall 
+		# print digit
+		li $v0,2
+		syscall
+		
+
+	j done
 
 ####****************************************************************************************************####
 ##### Function:    read  
