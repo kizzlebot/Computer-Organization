@@ -14,7 +14,7 @@ floatSet2: .float 7.89, 6.87, 9.89, 7.12, 6.23, 8.76, 8.21, 7.32, 7.32, 8.22
 .text 
 ##################################################################
 #####   Procedure: Main
-#####   Info:      Asks user for input of ten floats, then 
+####   Info:      Asks user for input of ten floats, then 
 ##################################################################
 .globl main
 main:
