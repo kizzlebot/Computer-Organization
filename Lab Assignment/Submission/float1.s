@@ -24,7 +24,6 @@ main:
 	la $a1,floatSet1 # Load address of floatSet1into syscall argument a1
 	mtc1 $zero,$f12
 
-
 	jal mean
 	j exit
 mean:
@@ -33,23 +32,19 @@ mean:
 		add $t2,$a1,$t1 	
 
 		l.s $f2,0($t2)
-
 		add.s $f12,$f12,$f2
 
 		addi $t0,$t0,1
 		sll $t1,$t0,2
 		j meanSubroutine
 	meanDiv:
-		mtc1 $t7,$f2
-		cvt.s.w $f2, $f2
 		
-		div.d $f12,$f12,$f2
-		cvt.d.w $f12,$f12
+		
 		la $a0,lbl
 		li $v0,4
 		syscall 
 
-		li $v0,3
+		li $v0,2
 		syscall	
 	j done
 done:

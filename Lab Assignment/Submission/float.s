@@ -65,7 +65,7 @@ main:
 ##### Description: calculates the mean and places in array[10]
 ####****************************************************************************************************####
 mean:
-	mtc1.d $zero,$f1
+	mtc1 $zero,$f1
 	meanSummate:
 		# t2 = baseAddr+offset
 		add $t2,$a1,$t1 
@@ -80,7 +80,7 @@ mean:
 		sll $t1,$t0,2
 		j meanSummate
 	meanDivide:
-		mfc1  $t7,$f5
+		mtc1  $t7,$f5
 		div.s $f1,$f1,$f5
 		s.s $f1,0($t2)		
 		####################################
