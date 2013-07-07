@@ -7,7 +7,7 @@ newLine: .asciiz "\n"
 meanLbl: .asciiz "\nMean: "								# 
 sumLbl:  .asciiz "\nSum: "
 floatSet1: .float 0.11, 0.34, 1.23, 5.34, 0.76, 0.65, 0.34, 0.12, 0.87, 0.56 # A eleven-space float array initially filled with whitespace
-floatSet2: .float 0.0, 42.2, 78.8, 129.4, 133.0, 0.0, 42.2, 78.8, 129.4, 133.0 
+floatSet2: .float 7.89, 6.87, 9.89, 7.12, 6.23, 8.76, 8.21, 7.32, 7.32, 8.22
 ##################################################################
 #   Text
 ##################################################################
@@ -25,8 +25,13 @@ main:
 
 	la $a1,floatSet1 # Load address of floatSet1into syscall argument a1
 	mtc1 $zero,$f1
-
 	jal mean
+	
+	la $a1,floatSet2 # Load address of floatSet1into syscall argument a1
+	mtc1 $zero,$f1
+	jal mean
+	
+	
 	j exit
 mean:
 	meanSubroutine:
@@ -54,11 +59,16 @@ mean:
 		syscall 
 		
 		mtc1 $t7,$f0
-		cvt.s.w $f1,$f0
-		div.s $f12,$f12,$f1
+		cvt.s.w $f0,$f0
+		div.s $f12,$f12,$f0
 		li $v0,2
 		syscall
+		
+		mtc1 $zero,$f12
+		mtc1 $zero,$f1
 	j done
 done:
+	move $t0, $zero
+	move $t1, $zero
 	jr $ra
 exit:
