@@ -69,7 +69,15 @@ main:
 
 	# summated calculation, a single cell of answerMatrix
 	move $s0,$zero
-
+	
+# Matrix Multiplication Algorithm	
+#for c = 0 ; c < 9 ; 
+	# for d = 0 ; d < '3' ; d++
+		# multiply each set (3)
+		# summ and assign
+	# end for
+	# c+=3
+# end for
 
 outerLoop:
 	beq $t0,$t6,exit
