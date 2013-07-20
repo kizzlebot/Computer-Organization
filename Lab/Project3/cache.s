@@ -59,31 +59,32 @@ MatrixC: .word 0:9 # Storage for generated 3x3 matrix
 ##	  {a,b,c} }
 .text
 main:
-	# Upper bounds 
-	li $t6,9 # Load number of rows
-	li $t7,9 # Load number of columns
-	
-	# incrementors
-	move $t0,$zero # rows
-	move $t1,$zero # cols
+	li $t8,9 # rows
+	li $t7,9 # cols
+	li $t6,9
 
-	# summated calculation, a single cell of answerMatrix
-	move $s0,$zero
+	move $t0,$zero
+	move $t1,$zero
+	move $t2,$zero
+# c[0] = A[0]B[0] + A[1]B[3] + A[2]B[6]
+# c[1] = A[0]B[1] + A[1]B[4] + A[2]B[7]
+# c[2] = A[0]B[2] + A[1]B[5] + A[2]B[8]
+for (( c=$START; c<'9'; ))
+do
+  # on every iteration add one and calculate sum
+  for (( d=$START; d<'3';d++)); do
+    printf "\nA[$d]B[$c] + A[$(($d+3))]B[$(($c+1))] +  A[$(($d+6))]B[$(($c+2))]"
+  done
+  c="$((c+3))"
+done
 
 
-outerLoop:
-	beq $t0,$t6,exit
-	lw $s1,MatrixA($t0)
+# c[3] = A[3]B[0] + A[4]B[3] + A[5]B[6]
+# c[4] = A[3]B[1] + A[4]B[4] + A[5]B[7]
+# c[5] = A[3]B[2] + A[4]B[5] + A[5]B[8]
 
-	innerLoop:
-		lw $s2,MatricB($t1)
-		mult $s1,$s2
-		mflo $t4
-		add $s0,$s0,$t4
-
-		addi $t1,$t1,1
-		
-	addi $t0,$t0,1
-exit:
+# c[6] = A[6]B[0] + A[7]B[3] + A[8]B[6]
+# c[7] = A[6]B[1] + A[7]B[4] + A[8]B[7]
+# c[8] = A[6]B[2] + A[7]B[5] + A[8]B[8]
 
 

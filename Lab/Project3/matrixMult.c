@@ -11,5 +11,7 @@ int main(){
 
   int i = 0 ; 
   int j = 0 ; 
-  for ( int i = 0 ; i < 
+  for ( int i = 0 ; i < 9 ; i++ ){
+    printf("%d",i);
+  }
 }
