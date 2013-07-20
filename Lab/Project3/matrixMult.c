@@ -10,25 +10,25 @@ int main(){
                0, 1, 2 };
 
   int C[9];
+  int a = 0 ; 
+  int b = 0 ; 
   int c = 0 ; 
-  int d = 0 ; 
-  int e = 0 ; 
 
-  for ( c = 0 ; c < 9 ; c+=3 ){
-    for ( d = 0 ; d < 3 ; d++){
-      int c1 = c+1;
-      int c2 = c+2;
-      int d1 = d+3;
-      int d2 = d+6;
-      printf("\nC[\e[38;5;26m%d\e[0m] = A[\e[38;5;26m%d\e[0m]B[\e[38;5;26m%d\e[0m] + A[\e[38;5;26m%d\e[0m]B[\e[38;5;26m%d\e[0m] + A[\e[38;5;26m%d\e[0m]B[\e[38;5;26m%d\e[0m]",e,c,d,c1,d1,c2,d2);
+  for ( a = 0 ; a < 9 ; a+=3 ){
+    for ( b = 0 ; b < 3 ; b++){
+      int a1 = a+1;
+      int a2 = a+2;
+      int b1 = b+3;
+      int b2 = b+6;
+      printf("\nC[\e[38;5;26m%d\e[0m] = A[\e[38;5;26m%d\e[0m]B[\e[38;5;26m%d\e[0m] + A[\e[38;5;26m%d\e[0m]B[\e[38;5;26m%d\e[0m] + A[\e[38;5;26m%d\e[0m]B[\e[38;5;26m%d\e[0m]",c,a,b,a1,b1,a2,b2);
       //printf "\nA[\e[38;5;26m$c\e[0m]B[\e[38;5;26m$d\e[0m] + A[\e[38;5;26m$(($c+1))\e[0m]B[\e[38;5;26m$(($d+3))\e[0m] +  A[\e[38;5;26m$(($c+2))\e[0m]B[\e[38;5;26m$(($d+6))\e[0m]"
-      C[e] = A[c]*B[d] + A[c+1]*B[d+3] + A[c+2]*B[d+6];
-      e++ ; 
+      C[c] = A[a]*B[b] + A[a+1]*B[b+3] + A[a+2]*B[b+6];
+      c++ ; 
     }  
   }
   printf("\n");
-  for ( c = 0 ; c < 9 ; c++){
-    printf("\nC[%d] = %d",c,C[c]);
+  for ( a = 0 ; a < 9 ; a++){
+    printf("\nC[%d] = %d",a,C[a]);
   }
   printf("\n");
 }
