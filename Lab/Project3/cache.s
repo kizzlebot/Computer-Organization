@@ -63,6 +63,7 @@ main:
 	li $t7,9 # cols
 	li $t6,9
 
+<<<<<<< HEAD
 	move $t0,$zero
 	move $t1,$zero
 	move $t2,$zero
@@ -78,6 +79,19 @@ do
   c="$((c+3))"
 done
 
+=======
+	# summated calculation, a single cell of answerMatrix
+	move $s0,$zero
+	
+# Matrix Multiplication Algorithm	
+#for c = 0 ; c < 9 ; 
+	# for d = 0 ; d < '3' ; d++
+		# multiply each set (3)
+		# summ and assign
+	# end for
+	# c+=3
+# end for
+>>>>>>> 35e8db369ba78ca93fca322f5048205bbc588285
 
 # c[3] = A[3]B[0] + A[4]B[3] + A[5]B[6]
 # c[4] = A[3]B[1] + A[4]B[4] + A[5]B[7]
