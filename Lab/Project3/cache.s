@@ -78,64 +78,64 @@ main:
 
   move $s3,$zero
   outerLoop:
-    beq $t0,$t7,exit
-    sll $s0,$t0,2
-    add $s0,$s5,$s0  # s0 = address of A
-        
-  innerLoop:
-    sll $s1,$t1,2
-    add $s1,$s6,$s1 # S1 = address of B
-    move $t5,$zero
-    mtlo $zero
-    lw $t3,0($s0)
-    lw $t4,0($s1)
-    
+  	beq $t0,$t7,exit
+  	sll $s0,$t0,2
+  	add $s0,$s5,$s0  # s0 = address of A
+  	  	
+	innerLoop:
+		sll $s1,$t1,2
+		add $s1,$s6,$s1 # S1 = address of B
+		move $t5,$zero
+		mtlo $zero
+		lw $t3,0($s0)
+		lw $t4,0($s1)
+		
  
-    
-    
-    mult $t4,$t3
-    mflo $t3
-    add $t5,$t5,$t3
-    
+		
+		
+		mult $t4,$t3
+		mflo $t3
+		add $t5,$t5,$t3
+		
 
-    
-    
-    lw $t3,4($s0)
-    lw $t4,12($s1)
-    
+		
+		
+		lw $t3,4($s0)
+		lw $t4,12($s1)
+		
 
-    
-    mult $t4,$t3
-    mflo $t3
-    add $t5,$t5,$t3       
+		
+		mult $t4,$t3
+		mflo $t3
+		add $t5,$t5,$t3				
 
-    
-    
-    lw $t3,8($s0)
-    lw $t4,24($s1)
-    mult $t4,$t3
-    mflo $t3
-    add $t5,$t5,$t3
+		
+		
+		lw $t3,8($s0)
+		lw $t4,24($s1)
+		mult $t4,$t3
+		mflo $t3
+		add $t5,$t5,$t3
 
-    
-    sll $s2,$t2,2
-    add $s2,$s7,$s2
-    sw  $t5,0($s2)
+		
+		sll $s2,$t2,2
+		add $s2,$s7,$s2
+		sw  $t5,0($s2)
 
-    ###Print###
-    la $a0,newLine
-    li $v0,4
-    syscall
-    lw $a0,0($s2)
-    li $v0,1
-    syscall   
-    ###Print###
-    addi $t1,$t1,1
-    addi $t2,$t2,1
-    bne $t1,$t6,innerLoop
-    
-  move $t1,$zero
-  addi $t0,$t0,3
+		###Print###
+		la $a0,newLine
+		li $v0,4
+		syscall
+		lw $a0,0($s2)
+		li $v0,1
+		syscall		
+		###Print###
+		addi $t1,$t1,1
+		addi $t2,$t2,1
+		bne $t1,$t6,innerLoop
+		
+	move $t1,$zero
+	addi $t0,$t0,3
     j outerLoop   
 
 exit:
