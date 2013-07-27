@@ -49,7 +49,7 @@
 ####   
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### ####     
 .data 
-MatrixA: .word 0,1,2,0,1,2,0,1,2
+MatrixA: .word 1,3,2,1,3,2,1,3,2 # Storage for generated 3x3 matrix 
 MatrixB: .word 0,1,2,0,1,2,0,1,2
 MatrixC: .word 1,3,2,1,3,2,1,3,2 # Storage for generated 3x3 matrix 
 newLine: .asciiz "\n" # Newline character
