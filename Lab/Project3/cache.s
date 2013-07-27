@@ -50,8 +50,8 @@
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### ####     
 .data 
 MatrixA: .word 1,3,2,1,3,2,1,3,2 # Storage for generated 3x3 matrix 
-MatrixB: .word 0,1,2,0,1,2,0,1,2
-MatrixC: .word 1,3,2,1,3,2,1,3,2 # Storage for generated 3x3 matrix 
+MatrixB: .word 5,6,7,5,6,7,5,6,7
+MatrixC: .word 0:9 # Storage for generated 3x3 matrix 
 newLine: .asciiz "\n" # Newline character
 
 ##  { {a,b,c} 
@@ -78,7 +78,7 @@ main:
 
   move $s3,$zero
   outerLoop:
-  	beq $t0,$t7,exit
+  	beq $t0,$t7,print
   	sll $s0,$t0,2
   	add $s0,$s5,$s0  # s0 = address of A
   	  	
@@ -86,7 +86,7 @@ main:
 		sll $s1,$t1,2
 		add $s1,$s6,$s1 # S1 = address of B
 		move $t5,$zero
-		mtlo $zero
+		
 		lw $t3,0($s0)
 		lw $t4,0($s1)
 		
@@ -122,20 +122,32 @@ main:
 		add $s2,$s7,$s2
 		sw  $t5,0($s2)
 
-		###Print###
-		la $a0,newLine
-		li $v0,4
-		syscall
-		lw $a0,0($s2)
-		li $v0,1
-		syscall		
-		###Print###
+		
 		addi $t1,$t1,1
 		addi $t2,$t2,1
 		bne $t1,$t6,innerLoop
 		
-    move $t1,$zero
-    addi $t0,$t0,3
+	move $t1,$zero
+	addi $t0,$t0,3
     j outerLoop   
 
+
+print:
+	move $t0,$zero	
+	move $s2,$s7
+	printLoop:
+
+		###Print###
+		la $a0,newLine # Print a new line
+		li $v0,4
+		syscall 
+		lw $a0,0($s2) 
+		li $v0,1
+		syscall		
+		
+		addi $t0,$t0,1
+		sll  $s2,$t0,2
+		add  $s2,$s7,$s2
+		bne $t0,$t7, printLoop
+		j exit
 exit:
