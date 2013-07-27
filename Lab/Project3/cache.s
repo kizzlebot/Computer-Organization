@@ -134,8 +134,8 @@ main:
 		addi $t2,$t2,1
 		bne $t1,$t6,innerLoop
 		
-	move $t1,$zero
-	addi $t0,$t0,3
+    move $t1,$zero
+    addi $t0,$t0,3
     j outerLoop   
 
 exit:
